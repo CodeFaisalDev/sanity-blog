@@ -5,17 +5,19 @@ import { Post, Settings } from 'lib/sanity.queries'
 import Head from 'next/head'
 
 export interface PostPageHeadProps {
-  settings: Settings
-  post: Post
+  settings: Settings | null
+  post: Post | null
 }
 
 export default function PostPageHead({ settings, post }: PostPageHeadProps) {
-  const title = settings.title ?? demo.title
+  const title = settings?.title ?? demo.title
+  const postTitle = post?.title ? `${post.title} | ${title}` : title
+
   return (
     <Head>
-      <title>{post.title ? `${post.title} | ${title}` : title}</title>
+      <title>{postTitle}</title>
       <BlogMeta />
-      {post.coverImage?.asset?._ref && (
+      {post?.coverImage?.asset?._ref && (
         <meta
           property="og:image"
           content={urlForImage(post.coverImage)
